@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RedMango_API.Data;
 using RedMango_API.Models;
 using RedMango_API.Models.Dto;
@@ -42,6 +43,7 @@ namespace RedMango_API.Controllers
             if (menuItem == null)
             {
                 _response.StatusCode = HttpStatusCode.NotFound;
+                _response.IsSuccess = false;
                 return NotFound(_response);
             }
 
@@ -59,6 +61,8 @@ namespace RedMango_API.Controllers
                 {
                     if (menuItemCreateDTO.Name == null)
                     {
+                        _response.StatusCode = HttpStatusCode.NotFound;
+                        _response.IsSuccess = false;
                         return BadRequest();
                     }
 
@@ -93,5 +97,100 @@ namespace RedMango_API.Controllers
             return _response;
         }
 
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<ApiResponse>> UpdateMenuItem(int id,[FromForm] MenuItemUpdateDTO menuItemUpdateDTO)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (id != menuItemUpdateDTO.Id)
+                    {
+                        _response.StatusCode = HttpStatusCode.NotFound;
+                        _response.IsSuccess = false;
+                        return BadRequest();
+                    }
+
+                    MenuItem menuItemFromDb = await _db.MenuItems.FindAsync(id);
+
+                    if (menuItemFromDb == null)
+                    {
+                        return BadRequest();
+                    }
+
+                    menuItemFromDb.Name = menuItemUpdateDTO.Name;
+                    menuItemFromDb.Price = menuItemUpdateDTO.Price;
+                    menuItemFromDb.Category=menuItemUpdateDTO.Category;
+                    menuItemFromDb.SpecialTag=menuItemUpdateDTO.SpecialTag;
+                    menuItemFromDb.Description = menuItemUpdateDTO.Description;
+
+                    _db.MenuItems.Update(menuItemFromDb);
+                    _db.SaveChanges();
+
+                    
+                    _response.StatusCode = HttpStatusCode.NoContent;
+
+                    return Ok(_response);
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+            }
+
+            return _response;
+        }
+
+
+
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<ApiResponse>> DeleteMenuItem(int id)
+        {
+            try
+            {
+                
+                    if (id==0)
+                    {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    return BadRequest();
+                    }
+
+                    MenuItem menuItemFromDb = await _db.MenuItems.FindAsync(id);
+
+                    if (menuItemFromDb == null)
+                    {
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.IsSuccess = false;
+                    return BadRequest();
+                    }
+
+                int milliseconds = 2000;
+                Thread.Sleep(milliseconds);
+
+                    _db.MenuItems.Remove(menuItemFromDb);
+                    _db.SaveChanges();
+
+
+                    _response.StatusCode = HttpStatusCode.NoContent;
+
+                    return Ok(_response);
+                }
+               
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+            }
+
+            return _response;
+        }
     }
 }
