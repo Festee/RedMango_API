@@ -5,6 +5,7 @@
 namespace RedMango_API.Migrations
 {
     /// <inheritdoc />
+    public partial class InitialMigraiton : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
