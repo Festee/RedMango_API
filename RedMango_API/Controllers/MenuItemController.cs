@@ -29,6 +29,7 @@ namespace RedMango_API.Controllers
             return Ok(_response);
         }
 
+
         [HttpGet("{id:int}", Name = "GetMenuItem")]
         public IActionResult GetMenuItem(int id)
         {
@@ -51,6 +52,7 @@ namespace RedMango_API.Controllers
             _response.StatusCode = HttpStatusCode.OK;
             return Ok(_response);
         }
+
 
         [HttpPost]
         public ActionResult<ApiResponse> CreateMenuItem([FromForm] MenuItemCreateDTO menuItemCreateDTO)
@@ -97,7 +99,7 @@ namespace RedMango_API.Controllers
             return _response;
         }
 
-
+     
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ApiResponse>> UpdateMenuItem(int id,[FromForm] MenuItemUpdateDTO menuItemUpdateDTO)
         {
@@ -146,8 +148,6 @@ namespace RedMango_API.Controllers
 
             return _response;
         }
-
-
 
 
         [HttpDelete("{id:int}")]
