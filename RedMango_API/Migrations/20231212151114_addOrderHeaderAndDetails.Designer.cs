@@ -12,7 +12,7 @@ using RedMango_API.Data;
 namespace RedMango_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231212133919_addOrderHeaderAndDetails")]
+    [Migration("20231212151114_addOrderHeaderAndDetails")]
     partial class addOrderHeaderAndDetails
     {
         /// <inheritdoc />
@@ -326,6 +326,10 @@ namespace RedMango_API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderDetailId"));
+
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MenuItemId")
                         .HasColumnType("int");

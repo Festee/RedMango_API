@@ -6,11 +6,11 @@ namespace RedMango_API.Models
     public class OrderDetails
     {
         [Key]
-        public int OrderDetailId {  get; set; }
+        public int OrderDetailId { get; set; }
         [Required]
-        public int OrderHeaderId {  get; set; }
+        public int OrderHeaderId { get; set; }
         [Required]
-        public int MenuItemId {  get; set; }
+        public int MenuItemId { get; set; }
         [ForeignKey("MenuItemId")]
         public MenuItem MenuItem { get; set; }
         [Required]
@@ -18,6 +18,6 @@ namespace RedMango_API.Models
         [Required]
         public string ItemName { get; set; }
         [Required]
-        public double Price {  get; set; }
+        public double Price { get; set; }
     }
 }
